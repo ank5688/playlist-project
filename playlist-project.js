@@ -35,12 +35,6 @@ export class PlaylistProject extends DDDSuper(I18NMixin(LitElement)) {
       title: "Title",
       bodyText: "Body text",
     };
-    this.registerLocalization({
-      context: this,
-      localesPath:
-        new URL("./locales/playlist-project.ar.json", import.meta.url).href +
-        "/../",
-    });
   }
 
   // Lit reactive properties
@@ -111,13 +105,6 @@ export class PlaylistProject extends DDDSuper(I18NMixin(LitElement)) {
     if (this.currentIndex > 0) {
       this.currentIndex--;
     }
-  }
-  /**
-   * haxProperties integration via file reference
-   */
-  static get haxProperties() {
-    return new URL(`./lib/${this.tag}.haxProperties.json`, import.meta.url)
-      .href;
   }
 }
 

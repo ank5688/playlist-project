@@ -21,10 +21,10 @@
       border-radius: var(--ddd-radius-lg);
     }
     playlist-project:hover {
-      box-shadow: var(--ddd-boxShadow-sm);
+      box-shadow: var(--ddd-boxShadow-m);
     }
     #example {
-      --playlist-project-font-size: var(--ddd-font-size-l);
+      --playlist-project-font-size: var(--ddd-font-size-xxlg);
       background-color: var(--ddd-accent-2);
       color: var(--ddd-primary-17);
     }
@@ -33,24 +33,24 @@
 </head>
 
 <body>
-  <div class id="demo">
-    <h1>playlist-project</h1>
-    <!-- this is going to do whatever the tag's defaults are -->
-    <playlist-project index="3">
-  <playlist-slide top-heading="Top line heading" second-heading="Slide 1, sub-heading">
-    <p>A whole bunch of content in here</p>
-  </playlist-slide>
-<playlist-slide top-heading="Top line heading" second-heading="Slide 1, sub-heading">
-    <p>A whole bunch of content in here</p>
-  </playlist-slide>
-<playlist-slide top-heading="Top line heading" second-heading="Slide 2, sub-heading">
-    <p>A whole bunch of content in here</p>
-  </playlist-slide>
-<playlist-slide top-heading="Top line heading" second-heading="Slide 3, sub-heading">
-    <p>A whole bunch of content in here</p>
-  </playlist-slide>
-</playlist-project>
+  <div id="demo-index-example">
+    <h2>Playlist</h2>
+    <playlist-project index="0">
+      <playlist-slide style="--playlist-slide-heading-second-font-size: var(--ddd-font-size-xxlg, 3rem);" topHeading="First heading" secondHeading="Slide A">
+        <p>Content for slide A. Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. </p>
+      </playlist-slide>
+      <playlist-slide style="--playlist-slide-heading-second-font-size: var(--ddd-font-size-xxlg, 3rem);" topHeading="Second heading" secondHeading="Slide B">
+        <p>Content for slide B. More text that will scroll if it’s long.</p>
+      </playlist-slide>
+      <playlist-slide style="--playlist-slide-heading-second-font-size: var(--ddd-font-size-xxlg, 3rem);" topHeading="Third heading" secondHeading="Slide C">
+        <p>Final slide content.</p>
+      </playlist-slide>
+      <playlist-slide style="--playlist-slide-heading-second-font-size: var(--ddd-font-size-xxlg, 3rem);" topHeading="Fourth heading" secondHeading="Slide D">
+        <p>Bonus slide content.</p>
+      </playlist-slide>
+    </playlist-project>
   </div>
+
   <script type="module" src="./playlist-project.js"></script>
 
   <!-- Take HAX, the Web and you further down the rabbit hole -->

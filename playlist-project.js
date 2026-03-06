@@ -6,6 +6,12 @@ import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
 
+// bring in child components so they are registered when someone pulls in playlist-project
+import "./playlist-slide.js";
+import "./slide-arrow.js";
+import "./slide-indicator.js";
+
+
 /**
  * `playlist-project`
  * 
@@ -20,30 +26,21 @@ export class PlaylistProject extends DDDSuper(I18NMixin(LitElement)) {
 
   constructor() {
     super();
-    this.title = "";
-    this.bodyText = "";
-    this.slides = [
-      {title: "Slide 1, subheading", bodyText: "Content for slide 1"},
-      {title: "Slide 2", bodyText: "Content for slide 2"},
-      {title: "Slide 3", bodyText: "Content for slide 3"},
-      {title: "Slide 4", bodyText: "Content for slide 4"}
-    ];
+    this.topHeading = "";
+    this.secondHeading = "";
+    this.index = 0;           // starting index via attribute
     this.currentIndex = 0;
-    this.t = this.t || {};
-    this.t = {
-      ...this.t,
-      title: "Title",
-      bodyText: "Body text",
-    };
+    this.slides = [];
+    this._updateSlides();
   }
 
   // Lit reactive properties
   static get properties() {
     return {
       ...super.properties,
-      title: { type: String },
-      bodyText: { type: String},
-      slides: { type: Array },
+      topHeading: { type: String },
+      secondHeading: { type: String },
+      index: { type: Number, reflect: true },
       currentIndex: { type: Number }
     };
   }
@@ -54,56 +51,109 @@ export class PlaylistProject extends DDDSuper(I18NMixin(LitElement)) {
     css`
       :host {
         display: block;
-        color: var(--ddd-theme-primary);
-        background-color: var(--ddd-theme-default-beaver70);
+        color: var(--playlist-project-text-color, #001f3f);
+        background-color: var(--ddd-theme-default-slateMaxLight);
         font-family: var(--ddd-font-navigation);
+        box-shadow: var(--playlist-project-box-shadow, 0 2px 4px rgba(0,0,0,0.25));
+      }
+      :host(:hover) {
+        box-shadow: var(--playlist-project-box-shadow-hover, 0 4px 8px rgba(0,0,0,0.45));
       }
       .wrapper {
         margin: var(--ddd-spacing-2);
         padding: var(--ddd-spacing-4);
+        position: relative;
       }
-      h3 span {
-        font-size: var(--playlist-project-label-font-size, var(--ddd-font-size-s));
+      h span {
+        font-size: var(--playlist-project-label-font-size-xxlg, var(--ddd-font-size-xxlg));
       }
-      .demo {
-        width: 300px;
-        padding: var(--ddd-spacing-2);
-        border: 1px solid var(--ddd-theme-primary);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+      .arrow{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-left: -60px;
+        margin-right: -60px;
       }
     `];
   }
 
   // Lit render the HTML
   render() {
-    const slide = this.slides[this.currentIndex];
     return html`
 <div class="wrapper">
-  <h3><span>${slide.title}:</span> ${this.title}</h3>
-  <p><span>${slide.bodyText}:</span> ${this.bodyText}</p>
-
-  <button @click=${this._prevSlide}
-    ?disabled="${this.currentIndex === 0}">
-    < Prev
-  </button>
-
-  <button @click=${this._nextSlide}
-    ?disabled="${this.currentIndex === this.slides.length - 1}">
-    Next >
-  </button>
+  <h3><span>${this.t.title}</span> ${this.title}</h3>
   <slot></slot>
-</div>`;
+  <div class="arrow">
+    <slide-arrow
+      .index=${this.currentIndex}
+      .total=${this.slides ? this.slides.length : 0}
+      @prev-clicked=${this.prev}
+      @next-clicked=${this.next}>
+    </slide-arrow>
+  </div>
+  <slide-indicator
+    @playlist-index-changed=${this.handleEvent}
+    .total=${this.slides ? this.slides.length : 0}
+    .currentIndex=${this.currentIndex}>
+  </slide-indicator>
+  </div>`;
   }
 
-  _nextSlide() {
+  handleEvent(e) {
+    this.currentIndex = e.detail.index;
+    this._updateSlides();
+  }
+
+  next() {
     if (this.currentIndex < this.slides.length - 1) {
       this.currentIndex++;
+      this._updateSlides();
+    }
+
+  }
+
+  prev() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+      this._updateSlides();
     }
   }
 
-  _prevSlide() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
+  firstUpdated() {
+    // watch for slot content changes so we can refresh the slide list
+    const slot = this.shadowRoot.querySelector('slot');
+    slot.addEventListener('slotchange', () => {
+      this.slides = Array.from(this.querySelectorAll('playlist-slide'));
+      this._updateSlides();
+    });
+
+    // set the starting index from attribute
+    this.currentIndex = this.index || 0;
+    this._updateSlides();
+  }
+
+  _updateSlides() {
+    // refresh slide list in case it has changed
+    this.slides = Array.from(this.querySelectorAll('playlist-slide'));
+
+    // clamp currentIndex
+    if (this.currentIndex < 0) {
+      this.currentIndex = 0;
+    }
+    if (this.slides.length && this.currentIndex > this.slides.length - 1) {
+      this.currentIndex = this.slides.length - 1;
+    }
+
+    // update slide elements via their `active` property
+    this.slides.forEach((slide, i) => {
+      slide.active = i === this.currentIndex;
+    });
+  }
+
+  updated(changed) {
+    if (changed.has('index')) {
+      this.currentIndex = this.index || 0;
+      this._updateSlides();
     }
   }
 }

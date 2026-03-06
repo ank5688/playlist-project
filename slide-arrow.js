@@ -67,8 +67,7 @@ export class SlideArrow extends DDDSuper(I18NMixin(LitElement)) {
         width: 40px;
         height: 40px;
         cursor: pointer;
-        /* smaller icon text keeping button dimensions */
-        font-size: var(--playlist-arrow-icon-size, 0.8rem);
+        font-size: var(--playlist-arrow-icon-size, 1.25rem);
         display: flex;
         align-items: center;
         justify-content: center;

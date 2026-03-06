@@ -47,8 +47,8 @@ export class PlaylistSlide extends DDDSuper(I18NMixin(LitElement)) {
         display: none;
         box-sizing: border-box;
         width: 100%;
-        height: var(--playlist-slide-height, 250px);
-        max-height: var(--playlist-slide-height, 250px);
+        height: var(--playlist-slide-height, 300px);
+        max-height: var(--playlist-slide-height, 3000px);
         color: var(--playlist-project-text-color, #001f3f);
         padding: var(--ddd-spacing-4) var(--ddd-spacing-6);
       }
@@ -58,7 +58,7 @@ export class PlaylistSlide extends DDDSuper(I18NMixin(LitElement)) {
       .slide-content {
         display: flex;
         flex-direction: column;
-        height: 100%;
+        height: 95%;
       }
       h2 {
         font-size: var(--playlist-slide-heading-top-font-size, var(--ddd-font-size-lg));
@@ -74,7 +74,6 @@ export class PlaylistSlide extends DDDSuper(I18NMixin(LitElement)) {
       }
       .body {
         flex: 1;
-        /* always show vertical scrollbar */
         overflow-y: scroll;
         overflow-x: hidden;
       }
@@ -82,7 +81,6 @@ export class PlaylistSlide extends DDDSuper(I18NMixin(LitElement)) {
         margin: 0;
         max-height: 100%;
       }
-      /* always-visible custom scrollbar (WebKit) */
       .body::-webkit-scrollbar {
         width: 12px;
       }
@@ -107,7 +105,7 @@ export class PlaylistSlide extends DDDSuper(I18NMixin(LitElement)) {
 <div class="slide-content">
   ${this.topHeading ? html`<h2>${this.topHeading}</h2>` : ""}
   ${this.secondHeading ? html`<h3>${this.secondHeading}</h3>` : ""}
-  <div class="line">⎯</div>
+  <div class="line">⎯⎯</div>
   <div class="body">
     <slot></slot>
   </div>

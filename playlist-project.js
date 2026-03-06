@@ -74,6 +74,12 @@ export class PlaylistProject extends DDDSuper(I18NMixin(LitElement)) {
         margin-left: -60px;
         margin-right: -60px;
       }
+    
+      slide-indicator {
+        position: absolute;
+        bottom: var(--ddd-spacing-1);
+        left: var(--ddd-spacing-4);
+      }
     `];
   }
 
